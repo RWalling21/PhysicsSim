@@ -1,16 +1,15 @@
 import pygame
 import sys
+from random import randint
 import pymunk
 import pymunk.pygame_util
 
 #TODO
 # Create small course
 # Add in friction
-# Add in multi-color marbles
 # Add in course creator
 # Small GUI for screen size? 
 # Rotation?
-# Touple issues in Create_static_platform()
 # Add custom sprites 
 # Remove debug_draw? 
 
@@ -20,16 +19,23 @@ def Create_marble(space, pos):
     body.position = pos
     shape = pymunk.Circle(body, 40)
     space.add(body, shape)
+    shape.color = pygame.Color(Random_color())
     return shape
 
 # Function for creating the static lines in the game
 # L = left (Touple), R = right (Touple), T = thickness (Float)
-def Create_static_platform(space, pos, L1, L2, R1, R2, T):
+def Create_static_platform(space, pos, L, R, T):
     body = pymunk.Body(1, 100, body_type = pymunk.Body.STATIC)
     body.position = pos
-    shape = pymunk.Segment(body, (L1, L2), (R1, R2), T)
+    shape = pymunk.Segment(body, L, R, T)
     space.add(body, shape)
     return shape
+
+def Random_color():
+    r = randint(0, 255)
+    g = randint(0, 255)
+    b = randint(0, 255)
+    return (r, g, b)
 
 # All Pygame setup    
 pygame.init()
@@ -45,10 +51,10 @@ space.gravity = (0, 500)
 # Creating static platforms
 plat = []
 
-plat.append(Create_static_platform(space, (0, 0), 700, 200, 1000, 100, 5))
-plat.append(Create_static_platform(space, (0, 0), 0, 300, 500, 450, 5))
-plat.append(Create_static_platform(space, (0, 0), 700, 600, 1000, 700, 5))
-plat.append(Create_static_platform(space, (0, 0), 0, 750, 700, 600, 5))
+plat.append(Create_static_platform(space, (0, 0), (700, 200), (1000, 100), 5))
+plat.append(Create_static_platform(space, (0, 0), (0, 300), (500, 450), 5))
+plat.append(Create_static_platform(space, (0, 0), (700, 600), (1000, 700), 5))
+plat.append(Create_static_platform(space, (0, 0), (0, 750), (700, 600), 5))
 
 # Holds all created marbles
 marble = []
